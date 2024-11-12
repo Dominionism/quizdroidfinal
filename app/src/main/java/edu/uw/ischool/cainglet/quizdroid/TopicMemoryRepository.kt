@@ -10,7 +10,7 @@ class TopicMemoryRepository : TopicRepository {
     private fun read() {
         Log.i(tag, "The read function was executed.")
         try {
-            val inputStream: InputStream = QuizApp.appContext.assets.open("questions.json")
+            val inputStream: InputStream = QuizApp.appContext.assets.open("data/questions.json")
             val jsonString = inputStream.bufferedReader().use { it.readText() }
 
             val jsonArray = JSONArray(jsonString)

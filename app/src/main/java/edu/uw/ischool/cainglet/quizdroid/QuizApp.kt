@@ -8,7 +8,7 @@ class QuizApp: Application() {
 
     companion object {
         lateinit var appContext: Context
-            private set
+        private set
     }
 
     private val tag = QuizApp::class.java.canonicalName
