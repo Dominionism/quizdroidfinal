@@ -27,7 +27,14 @@ class QuestionPage : AppCompatActivity() {
 
         question = findViewById(R.id.question)
         question.text = topic.questions[0].questionText
-        val correctAnswerIndex = topic.questions[0].correctOptionIndex
+        lateinit var correctAnswer: String
+
+        when (topic.questions[0].correctOptionIndex) {
+            1 -> correctAnswer = topic.questions[0].options[0]
+            2 -> correctAnswer = topic.questions[0].options[1]
+            3 -> correctAnswer = topic.questions[0].options[2]
+            4 -> correctAnswer = topic.questions[0].options[3]
+        }
 
         optionOne = findViewById(R.id.option_one)
         optionTwo = findViewById(R.id.option_two)
@@ -63,7 +70,7 @@ class QuestionPage : AppCompatActivity() {
         }
 
         submitButton.setOnClickListener {
-            if (selectedButton.text == topic.questions[0].options[correctAnswerIndex]) {
+            if (selectedButton.text == correctAnswer) {
                 score += 1
             }
 
@@ -71,7 +78,7 @@ class QuestionPage : AppCompatActivity() {
             answerPage.putExtra("score", score)
             answerPage.putExtra("chosen", selectedButton.text)
             answerPage.putExtra("totalQuestions", totalQuestions)
-            answerPage.putExtra("answer", topic.questions[0].options[correctAnswerIndex])
+            answerPage.putExtra("answer", correctAnswer)
             answerPage.putExtra("topic", topic)
             startActivity(answerPage)
         }
