@@ -67,8 +67,6 @@ class QuestionPage : AppCompatActivity() {
                 score += 1
             }
 
-
-
             val answerPage = Intent(this, AnswerPage::class.java)
             answerPage.putExtra("score", score)
             answerPage.putExtra("chosen", selectedButton.text)

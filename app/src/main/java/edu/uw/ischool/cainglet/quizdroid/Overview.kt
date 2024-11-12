@@ -22,7 +22,7 @@ class Overview : AppCompatActivity() {
         val topicTitle: TextView = findViewById(R.id.overview_title)
         topicTitle.text = topic.title
         val mathDescription: TextView = findViewById((R.id.long_description))
-        mathDescription.text = topic.longDescription
+        mathDescription.text = topic.description
 
         val numQuestions: TextView = findViewById(R.id.number_of_questions)
         numQuestions.text = "The ${topic.title} category has $totalQuestions questions."

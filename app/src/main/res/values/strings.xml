@@ -29,4 +29,10 @@
     <string name="hulk">Hulk</string>
     <string name="spiderman">Spiderman</string>
     <string name="iron_man">Iron Man</string>
+    <string name="my_actionbar">My ActionBar</string>
+    <string name="configure">Configure</string>
+    <string name="url">URL</string>
+    <string name="update_interval">Update Interval</string>
+    <string name="configure_settings">Configure Settings</string>
+    <string name="update">Update</string>
 </resources>

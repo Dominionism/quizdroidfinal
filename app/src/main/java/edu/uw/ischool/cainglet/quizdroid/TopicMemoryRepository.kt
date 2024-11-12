@@ -1,79 +1,48 @@
 package edu.uw.ischool.cainglet.quizdroid
 
-class TopicMemoryRepository: TopicRepository {
-    private val topicList = listOf(
-        Topic(
-            title = "Math",
-            shortDescription = "Basic Arithmetic Problems",
-            longDescription = "The Math category focuses on improving basic arithmetic skills.",
-            questions = mutableListOf(
-                Question(
-                    questionText = "2 + 2",
-                    options = listOf(
-                        "1", "2", "3", "4"
-                    ),
-                    correctOptionIndex = 3
-                ),
-                Question(
-                    questionText = "4 + 4",
-                    options = listOf(
-                        "6", "7", "8", "9"
-                    ),
-                    correctOptionIndex = 2
-                )
-            )
-        ),
-        Topic(
-            title = "Physics",
-            shortDescription = "Basic Physics Problems",
-            longDescription = "The Physics category focuses on improving basic physics skills.",
-            questions = mutableListOf(
-                Question(
-                    questionText = "Why does a balloon filled with helium float?",
-                    options = listOf(
-                        "Because helium is much lighter than air.",
-                        "Because it was decided by the universe.",
-                        "Because balloons were invented by aliens.",
-                        "Because air is lighter than helium."
-                    ),
-                    correctOptionIndex = 0
-                ),
-                Question(
-                    questionText = "If you drop a ball, what causes it's downward acceleration?",
-                    options = listOf(
-                        "Gravity",
-                        "Black Magic",
-                        "Alien Intervention",
-                        "Air"
-                    ),
-                    correctOptionIndex = 0
-                )
-            )
-        ),
-        Topic(
-            title = "Marvel Superheroes",
-            shortDescription = "Basic Hero Features",
-            longDescription = "The Marvel Superheroes category focuses on hero features.",
-            questions = mutableListOf(
-                Question(
-                    questionText = "Which superhero wields a hammer?",
-                    options = listOf(
-                        "Thor", "Hulk", "Spiderman", "Iron Man"
-                    ),
-                    correctOptionIndex = 0
-                ),
-                Question(
-                    questionText = "Which superhero shoots webs?",
-                    options = listOf(
-                        "Thor", "Hulk", "Spiderman", "Iron Man"
-                    ),
-                    correctOptionIndex = 2
-                )
-            )
-        )
-    )
+import android.util.Log
+import org.json.JSONArray
+import java.io.InputStream
 
-    override fun retrieveTopics(): List<Topic> {
+class TopicMemoryRepository : TopicRepository {
+    private val topicList: MutableList<Topic> = mutableListOf()
+    private val tag = TopicMemoryRepository::class.java.canonicalName
+    private fun read() {
+        Log.i(tag, "The read function was executed.")
+        try {
+            val inputStream: InputStream = QuizApp.appContext.assets.open("questions.json")
+            val jsonString = inputStream.bufferedReader().use { it.readText() }
+
+            val jsonArray = JSONArray(jsonString)
+            for (i in 0 until jsonArray.length()) {
+                val currentTopicObject = jsonArray.getJSONObject(i)
+                val topicName = currentTopicObject.getString("title")
+                val topicDescription = currentTopicObject.getString("desc")
+                val questionArray = currentTopicObject.getJSONArray("questions")
+                val questionList: MutableList<Question> = mutableListOf()
+
+                for (j in 0 until questionArray.length()) {
+                    val currentQuestionObject = questionArray.getJSONObject(j)
+                    val questionText = currentQuestionObject.getString("text")
+                    val answerIndex = currentQuestionObject.getString("answer").toInt()
+                    val questionOptions = currentQuestionObject.getJSONArray("answers")
+
+                    val optionsList: MutableList<String> = mutableListOf()
+                    for (k in 0 until questionOptions.length()) {
+                        optionsList.add(questionOptions.getString(k))
+                    }
+                    questionList.add(Question(questionText, optionsList, answerIndex))
+                }
+
+                topicList.add(Topic(topicName, topicDescription, questionList))
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun retrieveTopics(): MutableList<Topic> {
+        read()
         return topicList
     }
 }
